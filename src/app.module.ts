@@ -1,34 +1,17 @@
-import { Module } from "@nestjs/common";
+import { Global, Logger, Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { ConfigModule } from "@nestjs/config";
 import { UsersModule } from "./users/users.module";
+import { LogsModule } from './logs/logs.module';
 import * as process from "process";
 import * as dotenv from "dotenv";
-import { LoggerModule } from "nestjs-pino";
 
 const filePath = `.env.${process.env.NODE_ENV || "development"}`;
 
+@Global()
 @Module({
   imports: [
-    LoggerModule.forRoot({
-      pinoHttp: {
-        transport: process.env.NODE_ENV === "development" ? {
-          target: "pino-pretty",
-          options: {
-            colorize: true
-          }
-        } : {
-          target: "pino-roll",
-          options: {
-            file: "log.txt",
-            frequency: "daily",
-            mkdir: true,
-            size: "1m"
-          }
-        }
-      }
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: filePath,
@@ -36,10 +19,12 @@ const filePath = `.env.${process.env.NODE_ENV || "development"}`;
         path: ".env"
       })]
     }),
-    UsersModule
+    UsersModule,
+    LogsModule
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService, Logger],
+  exports: [Logger]
 })
 export class AppModule {
 }

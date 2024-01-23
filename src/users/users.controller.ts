@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, HttpException, HttpStatus } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { Logger } from "nestjs-pino";
 
 @Controller("users")
 export class UsersController {
@@ -11,6 +10,7 @@ export class UsersController {
     private readonly usersService: UsersService,
     private readonly logger: Logger
   ) {
+    this.logger.log("UserController init");
   }
 
   @Post()
@@ -20,6 +20,11 @@ export class UsersController {
 
   @Get()
   findAll() {
+    this.logger.log("info");
+    this.logger.warn("warn");
+    this.logger.debug("debug");
+    this.logger.error("error");
+    throw new HttpException("未认证", HttpStatus.FORBIDDEN);
     return this.usersService.findAll();
   }
 
