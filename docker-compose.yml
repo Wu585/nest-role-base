@@ -1,17 +1,11 @@
 version: '3.1'
 
 services:
-  postgres:
-    image: postgres:14
+  db:
+    image: mysql
     container_name: role-base
     ports:
-      - "5432:5432"
+      - "3306:3306"
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: role-base-dev
-    volumes:
-      - role-base:/var/lib/postgresql/data
-
-volumes:
-  chat-app-data:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: role-base
