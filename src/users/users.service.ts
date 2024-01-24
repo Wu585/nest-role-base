@@ -1,20 +1,22 @@
-import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { PrismaService } from "../prisma.service";
-import { GetUserDto } from "./dto/get-user.dto";
+import {Injectable} from "@nestjs/common";
+import {CreateUserDto} from "./dto/create-user.dto";
+import {UpdateUserDto} from "./dto/update-user.dto";
+import {PrismaService} from "../prisma.service";
+import {GetUserDto} from "./dto/get-user.dto";
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {
   }
 
-  create(createUserDto: CreateUserDto) {
-    return "This action adds a new user";
+  async create(createUserDto: CreateUserDto) {
+    return this.prisma.user.create({
+      data: createUserDto
+    })
   }
 
   async findAll(query: GetUserDto) {
-    const { limit, page, username, roleId, gender } = query;
+    const {limit, page, username, roleId, gender} = query;
 
     const take = limit || 10;
 

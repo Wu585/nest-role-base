@@ -26,19 +26,19 @@ const seed = async () => {
         gender: 1,
         photo: "xxx",
         address: "yyy",
-        userId: "5c4a6a00-f1f1-4c9e-9c2c-806862a0f898"
+        userId: "0ff6841f-27de-40fd-bf13-20fc147b81fc"
       },
       {
         gender: 0,
         photo: "awada",
         address: "yyvcacawy",
-        userId: "80ee8375-2f21-4658-a5ab-69294ae7627f"
+        userId: "3cad2e30-38e5-4232-ac9b-d3f0cbcc3d1a"
       },
       {
         gender: 1,
         photo: "waaw",
         address: "fwafw",
-        userId: "e86f5fda-427c-4f39-a965-3c3c46797769"
+        userId: "7706305a-8d7f-4471-a2ce-de24572cc357"
       }
     ]
   });
@@ -61,20 +61,20 @@ const seed = async () => {
   await prisma.usersWithRoles.createMany({
     data: [
       {
-        userId: "5c4a6a00-f1f1-4c9e-9c2c-806862a0f898",
-        roleId: "d523ae1d-62f7-42c9-87ba-d73e932aa4f4"
+        userId: "0ff6841f-27de-40fd-bf13-20fc147b81fc",
+        roleId: "3c6285fd-e8f4-4f65-be6d-18016f797896"
       },
       {
-        userId: "80ee8375-2f21-4658-a5ab-69294ae7627f",
-        roleId: "d523ae1d-62f7-42c9-87ba-d73e932aa4f4"
+        userId: "3cad2e30-38e5-4232-ac9b-d3f0cbcc3d1a",
+        roleId: "3c6285fd-e8f4-4f65-be6d-18016f797896"
       },
       {
-        userId: "80ee8375-2f21-4658-a5ab-69294ae7627f",
-        roleId: "36111f33-2347-4641-9b9f-4fe299c6d7f7"
+        userId: "3cad2e30-38e5-4232-ac9b-d3f0cbcc3d1a",
+        roleId: "271e3e04-627f-4075-a97b-65c7cae7bcf1"
       },
       {
-        userId: "e86f5fda-427c-4f39-a965-3c3c46797769",
-        roleId: "64e8e340-5b73-4496-8430-a52e0f2b2dc5"
+        userId: "7706305a-8d7f-4471-a2ce-de24572cc357",
+        roleId: "ed8b962b-4ee5-4c39-b4aa-cf4b73b8ae3e"
       }
     ]
   });
