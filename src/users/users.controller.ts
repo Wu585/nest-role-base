@@ -1,7 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, HttpException, HttpStatus } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Logger,
+  HttpException,
+  HttpStatus,
+  Query
+} from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { GetUserDto } from "./dto/get-user.dto";
 
 @Controller("users")
 export class UsersController {
@@ -19,13 +32,9 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    this.logger.log("info");
-    this.logger.warn("warn");
-    this.logger.debug("debug");
-    this.logger.error("error");
-    throw new HttpException("未认证", HttpStatus.FORBIDDEN);
-    return this.usersService.findAll();
+  findAll(@Query() query: GetUserDto) {
+    console.log(query);
+    return this.usersService.findAll(query);
   }
 
   @Get(":id")
