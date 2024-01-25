@@ -1,7 +1,7 @@
 import * as requestIp from "request-ip";
-import {ArgumentsHost, ExceptionFilter, HttpException, HttpStatus, LoggerService} from "@nestjs/common";
-import {HttpAdapterHost} from "@nestjs/core";
-import {Prisma} from "@prisma/client";
+import { ArgumentsHost, ExceptionFilter, HttpException, HttpStatus, LoggerService } from "@nestjs/common";
+import { HttpAdapterHost } from "@nestjs/core";
+import { Prisma } from "@prisma/client";
 
 export class AllExceptionFilter implements ExceptionFilter {
   constructor(
@@ -11,7 +11,7 @@ export class AllExceptionFilter implements ExceptionFilter {
   }
 
   catch(exception: unknown, host: ArgumentsHost): any {
-    const {httpAdapter} = this.httpAdapterHost;
+    const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
     const request = ctx.getRequest();
     const response = ctx.getResponse();
@@ -19,18 +19,23 @@ export class AllExceptionFilter implements ExceptionFilter {
     const httpStatus = exception instanceof HttpException
       ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    let statusCode: number | string = httpStatus
+    let statusCode: number | string = httpStatus;
 
-    let msg = exception["response"] || "Internet Server Error"
+    let msg = exception["response"] || "Internet Server Error";
 
     if (exception instanceof Prisma.PrismaClientKnownRequestError) {
 
       switch (exception.code) {
         case "P2002":
-          msg = "唯一索引冲突"
-          statusCode = exception.code
-          break
+          msg = "唯一索引冲突";
+          statusCode = exception.code;
+          break;
       }
+    }
+
+    if (exception instanceof Prisma.PrismaClientValidationError) {
+      msg = exception.message.replace(/\n/g, "");
+      statusCode = HttpStatus.BAD_REQUEST;
     }
 
     const responseBody = {

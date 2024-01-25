@@ -3,7 +3,7 @@ import { PrismaService } from "../prisma.service";
 const prisma = new PrismaService();
 
 const seed = async () => {
-  /*const res = await prisma.user.createMany({
+  const res1 = await prisma.user.createMany({
     data: [
       {
         username: "ricky",
@@ -19,31 +19,31 @@ const seed = async () => {
       }
     ]
   });
-  console.log(res);*/
-  /*const res = await prisma.profile.createMany({
+  console.log(res1);
+  const res2 = await prisma.profile.createMany({
     data: [
       {
         gender: 1,
         photo: "xxx",
         address: "yyy",
-        userId: "0ff6841f-27de-40fd-bf13-20fc147b81fc"
+        userId: 1
       },
       {
         gender: 0,
         photo: "awada",
         address: "yyvcacawy",
-        userId: "3cad2e30-38e5-4232-ac9b-d3f0cbcc3d1a"
+        userId: 2
       },
       {
         gender: 1,
         photo: "waaw",
         address: "fwafw",
-        userId: "7706305a-8d7f-4471-a2ce-de24572cc357"
+        userId: 3
       }
     ]
   });
-  console.log(res);*/
-  /*const res = await prisma.role.createMany({
+  console.log(res2);
+  const res3 = await prisma.role.createMany({
     data: [
       {
         name: "管理员"
@@ -56,25 +56,25 @@ const seed = async () => {
       }
     ]
   });
-  console.log(res);*/
+  console.log(res3);
 
   await prisma.usersWithRoles.createMany({
     data: [
       {
-        userId: "0ff6841f-27de-40fd-bf13-20fc147b81fc",
-        roleId: "3c6285fd-e8f4-4f65-be6d-18016f797896"
+        userId: 1,
+        roleId: 1
       },
       {
-        userId: "3cad2e30-38e5-4232-ac9b-d3f0cbcc3d1a",
-        roleId: "3c6285fd-e8f4-4f65-be6d-18016f797896"
+        userId: 1,
+        roleId: 2
       },
       {
-        userId: "3cad2e30-38e5-4232-ac9b-d3f0cbcc3d1a",
-        roleId: "271e3e04-627f-4075-a97b-65c7cae7bcf1"
+        userId: 2,
+        roleId: 2
       },
       {
-        userId: "7706305a-8d7f-4471-a2ce-de24572cc357",
-        roleId: "ed8b962b-4ee5-4c39-b4aa-cf4b73b8ae3e"
+        userId: 3,
+        roleId: 3
       }
     ]
   });

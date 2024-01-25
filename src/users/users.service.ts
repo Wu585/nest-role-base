@@ -1,8 +1,8 @@
-import {Injectable} from "@nestjs/common";
-import {CreateUserDto} from "./dto/create-user.dto";
-import {UpdateUserDto} from "./dto/update-user.dto";
-import {PrismaService} from "../prisma.service";
-import {GetUserDto} from "./dto/get-user.dto";
+import { Injectable } from "@nestjs/common";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { PrismaService } from "../prisma.service";
+import { GetUserDto } from "./dto/get-user.dto";
 
 @Injectable()
 export class UsersService {
@@ -10,13 +10,20 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
+    const { username, password, profile } = createUserDto;
     return this.prisma.user.create({
-      data: createUserDto
-    })
+      data: {
+        username,
+        password,
+        profile: {
+          create: profile
+        }
+      }
+    });
   }
 
   async findAll(query: GetUserDto) {
-    const {limit, page, username, roleId, gender} = query;
+    const { limit, page, username, roleId, gender } = query;
 
     const take = limit || 10;
 
@@ -26,7 +33,7 @@ export class UsersService {
         profile: {
           gender: +gender
         },
-        roles: {
+        roles: roleId && {
           some: {
             roleId
           }
@@ -66,8 +73,39 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const { username, password, profile, roles } = updateUserDto;
+
+    const updatedRoles = await this.prisma.role.findMany({
+      where: {
+        id: {
+          in: roles
+        }
+      }
+    });
+
+    console.log("updatedRoles");
+    console.log(updatedRoles);
+
+    return this.prisma.user.update({
+      where: {
+        id
+      },
+      data: {
+        username,
+        password,
+        profile: {
+          update: {
+            data: profile
+          }
+        },
+        roles: {
+          connect: {
+            id: 1
+          }
+        }
+      }
+    });
   }
 
   remove(id: number) {
