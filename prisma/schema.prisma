@@ -63,3 +63,14 @@ model Log {
   user      User?    @relation(fields: [userId], references: [id])
   userId    Int?     @map("user_id")
 }
+
+model View {
+  id    Int    @id @default(autoincrement())
+  x     Float
+  y     Float
+  z     Float
+  pitch Float
+  yaw   Float
+  roll  Float
+  name  String
+}

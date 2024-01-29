@@ -4,6 +4,7 @@ import { AppService } from "./app.service";
 import { ConfigModule } from "@nestjs/config";
 import { UsersModule } from "./users/users.module";
 import { LogsModule } from './logs/logs.module';
+import { ViewsModule } from './views/views.module';
 import * as process from "process";
 import * as dotenv from "dotenv";
 
@@ -20,7 +21,8 @@ const filePath = `.env.${process.env.NODE_ENV || "development"}`;
       })]
     }),
     UsersModule,
-    LogsModule
+    LogsModule,
+    ViewsModule
   ],
   controllers: [AppController],
   providers: [AppService, Logger],
