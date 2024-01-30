@@ -73,4 +73,13 @@ model View {
   yaw   Float
   roll  Float
   name  String
+
+  image Image?
+}
+
+model Image {
+  id     Int    @id @default(autoincrement())
+  name   String @unique
+  view   View   @relation(fields: [viewId], references: [id], onDelete: Cascade)
+  viewId Int    @unique @map("view_id")
 }
