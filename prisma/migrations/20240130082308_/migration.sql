@@ -74,6 +74,17 @@ CREATE TABLE `View` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `Image` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `view_id` INTEGER NOT NULL,
+
+    UNIQUE INDEX `Image_name_key`(`name`),
+    UNIQUE INDEX `Image_view_id_key`(`view_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `Profile` ADD CONSTRAINT `Profile_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -85,3 +96,6 @@ ALTER TABLE `UsersWithRoles` ADD CONSTRAINT `UsersWithRoles_role_id_fkey` FOREIG
 
 -- AddForeignKey
 ALTER TABLE `Log` ADD CONSTRAINT `Log_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Image` ADD CONSTRAINT `Image_view_id_fkey` FOREIGN KEY (`view_id`) REFERENCES `View`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

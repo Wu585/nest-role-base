@@ -8,7 +8,9 @@ import { LogEnum } from "../enum/config.enum";
 
 @Injectable()
 export class ViewsService {
-  constructor(private readonly prisma: PrismaService, private readonly configService: ConfigService) {
+  constructor(private readonly prisma: PrismaService,
+              private readonly configService: ConfigService
+  ) {
   }
 
   create(createViewDto: CreateViewDto) {
@@ -23,6 +25,7 @@ export class ViewsService {
         image: true
       }
     });
+
     return res.map(view => ({
       ...view,
       image: view.image?.name && this.configService.get(LogEnum.BASE_URL) + view.image?.name

@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Logger, Module } from "@nestjs/common";
 import { ViewsService } from "./views.service";
 import { ViewsController } from "./views.controller";
 import { PrismaService } from "../prisma.service";

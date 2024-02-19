@@ -28,7 +28,7 @@ model Profile {
   address   String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int      @unique @map("user_id")
 }
 
@@ -42,9 +42,9 @@ model Role {
 
 model UsersWithRoles {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int      @map("user_id")
-  role      Role     @relation(fields: [roleId], references: [id])
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
   roleId    Int      @map("role_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

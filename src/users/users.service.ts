@@ -10,13 +10,34 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    const { username, password, profile } = createUserDto;
+    const { username, password, profile, roles } = createUserDto;
+
+    /*const userRoles = await this.prisma.role.findMany({
+      where: {
+        id: {
+          in: roles
+        }
+      }
+    });
+
+    console.log("userRoles");
+    console.log(userRoles);*/
+
     return this.prisma.user.create({
       data: {
         username,
         password,
         profile: {
           create: profile
+        },
+        roles: {
+          create: roles.map(roleId => ({
+            role: {
+              connect: {
+                id: roleId
+              }
+            }
+          }))
         }
       }
     });
@@ -35,7 +56,7 @@ export class UsersService {
         },
         roles: roleId && {
           some: {
-            roleId
+            roleId: +roleId
           }
         }
       },
@@ -57,7 +78,7 @@ export class UsersService {
           }
         }
       },*/
-      take: take,
+      take,
       skip: (page - 1) * take
     });
 
@@ -76,17 +97,6 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     const { username, password, profile, roles } = updateUserDto;
 
-    const updatedRoles = await this.prisma.role.findMany({
-      where: {
-        id: {
-          in: roles
-        }
-      }
-    });
-
-    console.log("updatedRoles");
-    console.log(updatedRoles);
-
     return this.prisma.user.update({
       where: {
         id
@@ -100,15 +110,24 @@ export class UsersService {
           }
         },
         roles: {
-          connect: {
-            id: 1
-          }
+          deleteMany: {},
+          create: roles.map(roleId => ({
+            role: {
+              connect: {
+                id: roleId
+              }
+            }
+          }))
         }
       }
     });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.prisma.user.delete({
+      where: {
+        id
+      }
+    });
   }
 }
