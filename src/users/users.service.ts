@@ -90,8 +90,26 @@ export class UsersService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const result = await this.prisma.user.findUnique({
+      where: {
+        id
+      },
+      select: {
+        id: true,
+        username: true,
+        profile: true,
+        roles: {
+          select: {
+            role: true
+          }
+        }
+      }
+    });
+    return {
+      ...result,
+      roles: result.roles.map(role => role.role)
+    };
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
