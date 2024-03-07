@@ -1,13 +1,15 @@
-import { Injectable } from "@nestjs/common";
-import { CreateAuthDto } from "./dto/create-auth.dto";
-import { UpdateAuthDto } from "./dto/update-auth.dto";
-import { PrismaService } from "../prisma.service";
-import { JwtService } from "@nestjs/jwt";
+import {Injectable} from "@nestjs/common";
+import {CreateAuthDto} from "./dto/create-auth.dto";
+import {UpdateAuthDto} from "./dto/update-auth.dto";
+import {PrismaService} from "../prisma.service";
+import {JwtService} from "@nestjs/jwt";
+import {UsersService} from "../users/users.service";
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly userService: UsersService,
     private readonly jwtService: JwtService) {
   }
 
@@ -19,7 +21,7 @@ export class AuthService {
     });
 
     if (user && user.password === pass) {
-      const { password, ...result } = user;
+      const {password, ...result} = user;
       return result;
     }
 
@@ -27,9 +29,16 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { username: user.username, sub: user.id };
+    const payload = {username: user.username, sub: user.id};
     return {
       access_token: this.jwtService.sign(payload)
     };
+  }
+
+  async register(username: string, password: string) {
+    return this.userService.create({
+      username,
+      password
+    })
   }
 }
