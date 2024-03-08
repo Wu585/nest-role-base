@@ -4,7 +4,8 @@ import { WINSTON_MODULE_NEST_PROVIDER } from "nest-winston";
 import { AllExceptionFilter } from "./common/filters/all-exception.filter";
 import { ResponseInterceptor } from "./common/interceptors/transform.interceptor";
 import { join } from "path";
-import { json, urlencoded } from 'body-parser';
+import { json, urlencoded } from "body-parser";
+import { ValidationPipe } from "@nestjs/common";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestApplication>(AppModule);
@@ -19,12 +20,16 @@ async function bootstrap() {
     prefix: "/images"
   });
 
-  app.use(json({limit: '50mb'}))
-  app.use(urlencoded({ extended: true, limit: '50mb' }));
+  app.use(json({ limit: "50mb" }));
+  app.use(urlencoded({ extended: true, limit: "50mb" }));
 
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter));
+
+  app.useGlobalPipes(new ValidationPipe({
+    // whitelist: true 去除在类上不存在的字段
+  }));
 
   const port = 3000;
 

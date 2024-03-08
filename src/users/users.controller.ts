@@ -9,7 +9,7 @@ import {
   Logger,
   HttpException,
   HttpStatus,
-  Query
+  Query, ParseIntPipe
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -28,8 +28,8 @@ export class UsersController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    console.log('createUserDto')
-    console.log(createUserDto)
+    console.log("createUserDto");
+    console.log(createUserDto);
     return this.usersService.create(createUserDto);
   }
 
@@ -40,13 +40,13 @@ export class UsersController {
   }
 
   @Get(":id")
-  findOne(@Param("id") id: number) {
-    return this.usersService.findOne(+id);
+  findOne(@Param("id", ParseIntPipe) id: number) {
+    return this.usersService.findOne(id);
   }
 
   @Patch(":id")
   update(@Param("id") id: number, @Body() updateUserDto: UpdateUserDto) {
-    console.log('updateUserDto');
+    console.log("updateUserDto");
     console.log(updateUserDto);
     return this.usersService.update(+id, updateUserDto);
   }

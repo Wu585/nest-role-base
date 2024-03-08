@@ -1,4 +1,5 @@
 import { Profile } from "@prisma/client";
+import { IsOptional } from "class-validator";
 
 export class CreateUserDto {
   username: string;
@@ -6,5 +7,6 @@ export class CreateUserDto {
 
   profile?: Profile;
 
+  @IsOptional()
   roles?: number[];
 }

@@ -1,8 +1,8 @@
-import {Injectable} from "@nestjs/common";
-import {CreateUserDto} from "./dto/create-user.dto";
-import {UpdateUserDto} from "./dto/update-user.dto";
-import {PrismaService} from "../prisma.service";
-import {GetUserDto} from "./dto/get-user.dto";
+import { Injectable } from "@nestjs/common";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { PrismaService } from "../prisma.service";
+import { GetUserDto } from "./dto/get-user.dto";
 
 @Injectable()
 export class UsersService {
@@ -10,7 +10,7 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    const {username, password, profile, roles} = createUserDto;
+    const { username, password, profile, roles } = createUserDto;
 
     /*const userRoles = await this.prisma.role.findMany({
       where: {
@@ -23,6 +23,11 @@ export class UsersService {
     console.log("userRoles");
     console.log(userRoles);*/
 
+    let updatedRoles = roles;
+    if (!updatedRoles) {
+      updatedRoles = [3];
+    }
+
     return this.prisma.user.create({
       data: {
         username,
@@ -31,7 +36,7 @@ export class UsersService {
           create: profile
         },
         roles: {
-          create: roles?.map(roleId => ({
+          create: updatedRoles.map(roleId => ({
             role: {
               connect: {
                 id: roleId
@@ -45,9 +50,9 @@ export class UsersService {
   }
 
   async findAll(query: GetUserDto) {
-    const {limit, page, username, roleId, gender} = query;
+    const { perPage, page, username, roleId, gender } = query;
 
-    const take = limit || 10;
+    const take = perPage || 10;
 
     const result = await this.prisma.user.findMany({
       where: {
@@ -107,14 +112,15 @@ export class UsersService {
         }
       }
     });
+
     return {
       ...result,
-      roles: result.roles.map(role => role.role)
+      roles: result?.roles?.map(role => role.role)
     };
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const {username, password, profile, roles} = updateUserDto;
+    const { username, password, profile, roles } = updateUserDto;
 
     return this.prisma.user.update({
       where: {
