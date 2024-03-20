@@ -29,6 +29,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({
     // whitelist: true 去除在类上不存在的字段
+    transform: true
   }));
 
   const port = 3000;

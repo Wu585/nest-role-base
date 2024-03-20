@@ -52,17 +52,18 @@ export class UsersService {
   async findAll(query: GetUserDto) {
     const { perPage, page, username, roleId, gender } = query;
 
+    const _page = page || 1
     const take = perPage || 10;
 
     const result = await this.prisma.user.findMany({
       where: {
         username,
         profile: {
-          gender: +gender
+          gender
         },
         roles: roleId && {
           some: {
-            roleId: +roleId
+            roleId
           }
         }
       },
@@ -85,7 +86,7 @@ export class UsersService {
         }
       },*/
       take,
-      skip: (page - 1) * take
+      skip: (_page - 1) * take
     });
 
     return result.map(user => {

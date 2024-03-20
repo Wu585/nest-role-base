@@ -15,6 +15,7 @@ import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { GetUserDto } from "./dto/get-user.dto";
+import { GetUserPipe } from "./pipes/get-user.pipe";
 
 @Controller("users")
 export class UsersController {
