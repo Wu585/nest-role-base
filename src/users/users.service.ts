@@ -3,6 +3,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { PrismaService } from "../prisma.service";
 import { GetUserDto } from "./dto/get-user.dto";
+import * as argon2 from "argon2";
 
 @Injectable()
 export class UsersService {
@@ -28,10 +29,12 @@ export class UsersService {
       updatedRoles = [3];
     }
 
+    const secretPassword = await argon2.hash(password);
+
     return this.prisma.user.create({
       data: {
         username,
-        password,
+        password: secretPassword,
         profile: {
           create: profile
         },
@@ -52,7 +55,7 @@ export class UsersService {
   async findAll(query: GetUserDto) {
     const { perPage, page, username, roleId, gender } = query;
 
-    const _page = page || 1
+    const _page = page || 1;
     const take = perPage || 10;
 
     const result = await this.prisma.user.findMany({
