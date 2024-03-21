@@ -1,9 +1,10 @@
-import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { PrismaService } from "../prisma.service";
-import { GetUserDto } from "./dto/get-user.dto";
+import {ForbiddenException, Injectable} from "@nestjs/common";
+import {CreateUserDto} from "./dto/create-user.dto";
+import {UpdateUserDto} from "./dto/update-user.dto";
+import {PrismaService} from "../prisma.service";
+import {GetUserDto} from "./dto/get-user.dto";
 import * as argon2 from "argon2";
+import {error} from "winston";
 
 @Injectable()
 export class UsersService {
@@ -11,7 +12,17 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    const { username, password, profile, roles } = createUserDto;
+    const {username, password, profile, roles} = createUserDto;
+
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username
+      }
+    })
+
+    if (user) {
+      throw new ForbiddenException('用户已存在')
+    }
 
     /*const userRoles = await this.prisma.role.findMany({
       where: {
@@ -31,7 +42,7 @@ export class UsersService {
 
     const secretPassword = await argon2.hash(password);
 
-    return this.prisma.user.create({
+    const res = await this.prisma.user.create({
       data: {
         username,
         password: secretPassword,
@@ -47,13 +58,25 @@ export class UsersService {
             }
           }))
         }
+      },
+      include: {
+        roles: {
+          select: {
+            role: true
+          }
+        },
+        profile: true
       }
     });
 
+    return {
+      ...res,
+      roles: res.roles.map(role => role.role)
+    }
   }
 
   async findAll(query: GetUserDto) {
-    const { perPage, page, username, roleId, gender } = query;
+    const {perPage, page, username, roleId, gender} = query;
 
     const _page = page || 1;
     const take = perPage || 10;
@@ -124,7 +147,7 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const { username, password, profile, roles } = updateUserDto;
+    const {username, password, profile, roles} = updateUserDto;
 
     return this.prisma.user.update({
       where: {

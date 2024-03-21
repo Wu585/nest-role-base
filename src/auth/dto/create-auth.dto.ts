@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString, Length } from "class-validator";
+import {Exclude} from "class-transformer";
 
 export class CreateAuthDto {
   @IsString()

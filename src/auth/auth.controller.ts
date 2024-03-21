@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from "@nestjs/common";
+import {Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, UseInterceptors} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthGuard } from "@nestjs/passport";
 import { LocalAuthGuard } from "./local-auth.guard";
 import { CreateAuthDto } from "./dto/create-auth.dto";
 import { Public } from "../decorators/public.decarator";
+import {SerializeInterceptor} from "../common/interceptors/serialize.interceptor";
 
 @Controller("auth")
 export class AuthController {
@@ -18,6 +19,7 @@ export class AuthController {
   }
 
   @Public()
+  @UseInterceptors(SerializeInterceptor)
   @Post("register")
   async register(@Body() dto: CreateAuthDto) {
     const { username, password } = dto;
