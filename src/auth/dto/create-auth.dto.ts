@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, Length } from "class-validator";
-import {Exclude} from "class-transformer";
+import { Expose } from "class-transformer";
 
 export class CreateAuthDto {
   @IsString()
@@ -15,4 +15,9 @@ export class CreateAuthDto {
     message: `密码长度必须在$constraint1到$constraint2之间`
   })
   password: string;
+}
+
+export class PublicCreateAuthDto {
+  @Expose()
+  username: string;
 }

@@ -17,8 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    console.log('payload');
-    console.log(payload);
+    // return的值放在了req.user上面
     return { id: payload.sub, username: payload.username };
   }
 }
