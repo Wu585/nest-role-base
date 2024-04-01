@@ -7,6 +7,7 @@ import { LogsModule } from './logs/logs.module';
 import { ViewsModule } from './views/views.module';
 import { UploadModule } from './upload/upload.module';
 import { AuthModule } from './auth/auth.module';
+import { RolesModule } from './roles/roles.module';
 import * as process from "process";
 import * as dotenv from "dotenv";
 
@@ -26,7 +27,8 @@ const filePath = `.env.${process.env.NODE_ENV || "development"}`;
     LogsModule,
     ViewsModule,
     UploadModule,
-    AuthModule
+    AuthModule,
+    RolesModule
   ],
   controllers: [AppController],
   providers: [AppService, Logger],
