@@ -38,6 +38,7 @@ model Role {
   createdAt DateTime         @default(now()) @map("created_at")
   updatedAt DateTime         @updatedAt @map("updated_at")
   users     UsersWithRoles[]
+  menus     RolesWithMenus[]
 }
 
 model UsersWithRoles {
@@ -50,6 +51,30 @@ model UsersWithRoles {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@index([userId, roleId])
+}
+
+model Menu {
+  id    Int              @id @default(autoincrement())
+  name  String
+  path  String
+  order Int
+  acl   String
+  roles RolesWithMenus[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model RolesWithMenus {
+  id        Int      @id @default(autoincrement())
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId    Int      @map("role_id")
+  menu      Menu     @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  menuId    Int      @map("menu_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([roleId, menuId])
 }
 
 model Log {
