@@ -22,6 +22,9 @@ export class RolesService {
     return this.prismaService.role.findUnique({
       where: {
         id
+      },
+      include:{
+        menus: true
       }
     });
   }
