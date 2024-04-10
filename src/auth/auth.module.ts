@@ -10,6 +10,7 @@ import { JwtStrategy } from "./jwt.strategy";
 import { UsersModule } from "../users/users.module";
 import { APP_GUARD } from "@nestjs/core";
 import { JwtAuthGuard } from "./jwt-auth.guard";
+import { CaslAbilityService } from "./casl-ability.service";
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { JwtAuthGuard } from "./jwt-auth.guard";
     })
   ],
   controllers: [AuthController],
-  providers: [AuthService, PrismaService, LocalStrategy, JwtStrategy,
+  providers: [AuthService, PrismaService, LocalStrategy, JwtStrategy, CaslAbilityService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard
