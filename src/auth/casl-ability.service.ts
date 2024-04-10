@@ -11,7 +11,7 @@ export class CaslAbilityService {
   forRoot() {
     const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
-    can("read", "User");
+    can("manage", "User");
 
     return build();
   }
