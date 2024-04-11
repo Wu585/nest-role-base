@@ -1,17 +1,18 @@
-import { Module } from "@nestjs/common";
-import { AuthService } from "./auth.service";
-import { AuthController } from "./auth.controller";
-import { PrismaService } from "../prisma.service";
-import { LocalStrategy } from "./local.strategy";
-import { JwtModule } from "@nestjs/jwt";
-import { ConfigService } from "@nestjs/config";
-import { ConfigEnum } from "../enum/config.enum";
-import { JwtStrategy } from "./jwt.strategy";
-import { UsersModule } from "../users/users.module";
-import { APP_GUARD } from "@nestjs/core";
-import { JwtAuthGuard } from "./jwt-auth.guard";
-import { CaslAbilityService } from "./casl-ability.service";
+import {Global, Module} from "@nestjs/common";
+import {AuthService} from "./auth.service";
+import {AuthController} from "./auth.controller";
+import {PrismaService} from "../prisma.service";
+import {LocalStrategy} from "./local.strategy";
+import {JwtModule} from "@nestjs/jwt";
+import {ConfigService} from "@nestjs/config";
+import {ConfigEnum} from "../enum/config.enum";
+import {JwtStrategy} from "./jwt.strategy";
+import {UsersModule} from "../users/users.module";
+import {APP_GUARD} from "@nestjs/core";
+import {JwtAuthGuard} from "./jwt-auth.guard";
+import {CaslAbilityService} from "./casl-ability.service";
 
+@Global()
 @Module({
   imports: [
     UsersModule,
@@ -20,7 +21,7 @@ import { CaslAbilityService } from "./casl-ability.service";
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get(ConfigEnum.JWT_SECRET_KEY),
-        signOptions: { expiresIn: "30d" }
+        signOptions: {expiresIn: "30d"}
       })
     })
   ],
@@ -29,7 +30,8 @@ import { CaslAbilityService } from "./casl-ability.service";
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard
-    }]
+    }],
+  exports: [CaslAbilityService]
 })
 export class AuthModule {
 }

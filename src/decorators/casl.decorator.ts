@@ -9,7 +9,9 @@ export enum CHECK_POLICIES_KEY {
   CANNOT = "CHECK_POLICIES_CANNOT"
 }
 
-type PolicyHandlerCallback = (ability: AppAbility) => boolean;
+export type PolicyHandlerCallback = (ability: AppAbility) => boolean;
+
+export type CaslHandlerType = PolicyHandlerCallback | PolicyHandlerCallback[]
 
 export const CheckPolicies = (...handler: PolicyHandlerCallback[]) => SetMetadata(CHECK_POLICIES_KEY.HANDLER, handler);
 

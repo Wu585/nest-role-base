@@ -1,14 +1,14 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
-import { RolesService } from "./roles.service";
-import { CreateRoleDto } from "./dto/create-role.dto";
-import { UpdateRoleDto } from "./dto/update-role.dto";
-import { Roles } from "../decorators/roles.decarator";
-import { Role } from "../enum/roles.enum";
-import { RoleGuard } from "../guards/role.guard";
+import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards} from "@nestjs/common";
+import {RolesService} from "./roles.service";
+import {CreateRoleDto} from "./dto/create-role.dto";
+import {UpdateRoleDto} from "./dto/update-role.dto";
+import {Can, Cannot, CheckPolicies} from "../decorators/casl.decorator";
+import {Action} from "../enum/action.enum";
+import {CaslGuard} from "../guards/casl.guard";
 
 @Controller("roles")
-@Roles(Role.VIP)
-@UseGuards(RoleGuard)
+@UseGuards(CaslGuard)
+// @CheckPolicies(ability => ability.can(Action.Read, 'Role'))
 export class RolesController {
   constructor(
     private readonly rolesService: RolesService
@@ -21,6 +21,8 @@ export class RolesController {
   }
 
   @Get()
+  @Can(Action.Read, 'Role')
+  @Cannot(Action.Update, 'Role')
   findAll() {
     return this.rolesService.findAll();
   }

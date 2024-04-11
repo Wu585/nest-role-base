@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, SerializeOptions } from "@nestjs/common";
+import {ForbiddenException, Injectable, SerializeOptions} from "@nestjs/common";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
 import {PrismaService} from "../prisma.service";
@@ -124,6 +124,7 @@ export class UsersService {
   }
 
   async findOne(id: number) {
+
     const result = await this.prisma.user.findUnique({
       where: {
         id
@@ -133,9 +134,17 @@ export class UsersService {
         username: true,
         profile: true,
         roles: {
-          select: {
-            role: true
-          }
+          include: {
+            role: {
+              include: {
+                menus: {
+                  include: {
+                    menu: true
+                  }
+                }
+              }
+            },
+          },
         }
       }
     });
