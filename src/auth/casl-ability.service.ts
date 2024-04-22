@@ -20,7 +20,6 @@ export class CaslAbilityService {
 
     user.roles.forEach(role => {
       role.menus.forEach(menu => {
-        console.log(menu);
         const { path, acl } = menu.menu;
         const actions = acl.split(",");
         actions.forEach((action) => {
@@ -28,9 +27,6 @@ export class CaslAbilityService {
         });
       });
     });
-
-    console.log('build()');
-    console.log(build());
 
     return build();
   }
