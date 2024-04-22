@@ -13,7 +13,7 @@ export type PolicyHandlerCallback = (ability: AppAbility) => boolean;
 
 export type CaslHandlerType = PolicyHandlerCallback | PolicyHandlerCallback[]
 
-export const CheckPolicies = (...handler: PolicyHandlerCallback[]) => SetMetadata(CHECK_POLICIES_KEY.HANDLER, handler);
+export const CheckPolicies = (...handlers: PolicyHandlerCallback[]) => SetMetadata(CHECK_POLICIES_KEY.HANDLER, handlers);
 
 export const Can = (action: Action, subject: InferSubjects<any>, conditions?: any) => SetMetadata(CHECK_POLICIES_KEY.CAN,
   (ability: AppAbility) => ability.can(action, subject, conditions))

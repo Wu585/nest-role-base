@@ -1,11 +1,12 @@
-import {Injectable} from "@nestjs/common";
-import {AbilityBuilder, PureAbility} from "@casl/ability";
-import {createPrismaAbility, PrismaQuery, Subjects} from "@casl/prisma";
-import {User, Role} from "@prisma/client";
-import {UsersService} from "../users/users.service";
+import { Injectable } from "@nestjs/common";
+import { AbilityBuilder, PureAbility } from "@casl/ability";
+import { createPrismaAbility, PrismaQuery, Subjects } from "@casl/prisma";
+import { User, Role, Menu } from "@prisma/client";
+import { UsersService } from "../users/users.service";
+import { getEntities } from "../utils/common";
 
 //验证实体定义
-export type AppAbility = PureAbility<[string, Subjects<{ User: User, Role: Role }>], PrismaQuery>
+export type AppAbility = PureAbility<[string, Subjects<{ User: User, Role: Role, Menu: Menu }>], PrismaQuery>
 
 @Injectable()
 export class CaslAbilityService {
@@ -13,18 +14,23 @@ export class CaslAbilityService {
   }
 
   async forRoot(userId: number) {
-    const {can, cannot, build} = new AbilityBuilder<AppAbility>(createPrismaAbility);
+    const { can, cannot, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
-    const user = await this.usersService.findOne(userId)
+    const user = await this.usersService.findOne(userId);
 
-    user.roles.forEach(role=>{
-      role.menus.forEach(menu=>{
+    user.roles.forEach(role => {
+      role.menus.forEach(menu => {
         console.log(menu);
-      })
-    })
+        const { path, acl } = menu.menu;
+        const actions = acl.split(",");
+        actions.forEach((action) => {
+          can(action, getEntities(path));
+        });
+      });
+    });
 
-    can("read", "Role");
-    // cannot("update", "Role");
+    console.log('build()');
+    console.log(build());
 
     return build();
   }

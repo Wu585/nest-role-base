@@ -15,28 +15,32 @@ export class RolesController {
   ) {
   }
 
+  @Can(Action.Create, 'Role')
   @Post()
   create(@Body() createRoleDto: CreateRoleDto) {
     return this.rolesService.create(createRoleDto);
   }
 
-  @Get()
   @Can(Action.Read, 'Role')
-  @Cannot(Action.Update, 'Role')
+  @Get()
+  // @Cannot(Action.Update, 'Role')
   findAll() {
     return this.rolesService.findAll();
   }
 
+  @Can(Action.Read, 'Role')
   @Get(":id")
   findOne(@Param("id", ParseIntPipe) id: number) {
     return this.rolesService.findOne(id);
   }
 
+  @Can(Action.Update, 'Role')
   @Patch(":id")
   update(@Param("id", ParseIntPipe) id: number, @Body() updateRoleDto: UpdateRoleDto) {
     return this.rolesService.update(id, updateRoleDto);
   }
 
+  @Can(Action.Delete, 'Role')
   @Delete(":id")
   remove(@Param("id", ParseIntPipe) id: number) {
     return this.rolesService.remove(id);
